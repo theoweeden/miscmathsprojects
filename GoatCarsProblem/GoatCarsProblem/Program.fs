@@ -2,18 +2,23 @@
 
 open System
 
+let generateDoors (r : System.Random) =
+    let mutable doors = [| for b in 1..3 -> false |]
+    doors.[r.Next(doors.Length)] <- true
+    doors;
+
+
+
 [<EntryPoint>]
 let main argv =
     let r = System.Random()
     
-    let iterations = 1000
+    let iterations = 100000
     let mutable total = 0
     
     for i in 1..iterations do
         //generate doors
-        let mutable doors = [| for b in 1..3 -> false |]
-        doors.[r.Next(doors.Length)] <- true
-
+        let doors = generateDoors r
         //player decision
         let originalPlayerPick = r.Next(doors.Length)
         let mutable computerPick = r.Next(doors.Length)
@@ -34,5 +39,5 @@ let main argv =
 
     let probability = float total / float iterations 
     Console.WriteLine probability
-    0 // return an integer exit code
     
+    0
