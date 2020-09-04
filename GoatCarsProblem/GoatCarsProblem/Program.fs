@@ -7,6 +7,13 @@ let generateDoors (r : System.Random) =
     doors.[r.Next(doors.Length)] <- true
     doors;
 
+let pickDoor (r : System.Random) (doors : bool array) (check) =
+    let mutable newDoor = r.Next(doors.Length)
+    while check newDoor do
+        newDoor <- newDoor + 1
+        if newDoor >= doors.Length then
+            newDoor <- 0
+    newDoor
 
 
 [<EntryPoint>]
@@ -21,18 +28,12 @@ let main argv =
         let doors = generateDoors r
         //player decision
         let originalPlayerPick = r.Next(doors.Length)
-        let mutable computerPick = r.Next(doors.Length)
-        while computerPick = originalPlayerPick || doors.[computerPick] do
-            computerPick <- computerPick + 1
-            if computerPick >= doors.Length then
-                computerPick <- 0
-        
+        let checkComputerPick n = n = originalPlayerPick || doors.[n] 
+        let computerPick = pickDoor r doors checkComputerPick
+
         //player switches
-        let mutable playerPick = 0
-        while computerPick = playerPick || playerPick = originalPlayerPick do
-            playerPick <- playerPick + 1
-            if playerPick >= doors.Length then
-                playerPick <- 0
+        let checkPlayerPick n = computerPick = n || n = originalPlayerPick
+        let playerPick = pickDoor r doors checkPlayerPick
                 
         if doors.[playerPick] then
             total <- total + 1
