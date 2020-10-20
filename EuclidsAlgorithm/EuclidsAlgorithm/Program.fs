@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.org
-
-open System
+﻿open System
 
 let rec inputNumber (display : string) =
     Console.WriteLine display
